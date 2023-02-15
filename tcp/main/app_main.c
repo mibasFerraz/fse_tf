@@ -67,24 +67,12 @@ void conectadoWifi(void * params)
 
 void envia_mensagem_presenca()
 {
-    bool led_vermelho = true;
-    bool led_verde = false;
-    sprintf(mensagem, "{\"estado led verde\": %d, \"estado led vermelho\": %d}", led_verde, led_vermelho);
-    sprintf(presenca, "{\"tem presenca\": %d}", led_vermelho);
-    mqtt_envia_mensagem("v1/devices/me/attributes", mensagem);
-    mqtt_envia_mensagem("v1/devices/me/attributes", presenca);
-    vTaskDelay(100 / portTICK_PERIOD_MS); 
+    
 }
 
 void envia_mensagem_nao_presenca()
 {
-    bool led_verde = true;
-    bool led_vermelho = false;
-    sprintf(mensagem, "{\"estado led verde\": %d, \"estado led vermelho\": %d}", led_verde, led_vermelho);
-    sprintf(presenca, "{\"tem presenca\": %d}", led_vermelho);
-    mqtt_envia_mensagem("v1/devices/me/attributes", mensagem);
-    mqtt_envia_mensagem("v1/devices/me/attributes", presenca);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+
 }
 
 void trataComunicacaoComServidor(void * params)
@@ -100,11 +88,23 @@ void trataComunicacaoComServidor(void * params)
             {
                 desliga_led_verde();
                 liga_led_vermelho();
-                envia_mensagem_presenca();   
+                bool led_vermelho = true;
+                bool led_verde = false;
+                sprintf(mensagem, "{\"estado led verde\": %d, \"estado led vermelho\": %d}", led_verde, led_vermelho);
+                sprintf(presenca, "{\"tem presenca\": %d}", led_vermelho);
+                mqtt_envia_mensagem("v1/devices/me/attributes", mensagem);
+                mqtt_envia_mensagem("v1/devices/me/attributes", presenca);
+                vTaskDelay(1000 / portTICK_PERIOD_MS);   
             }else{
                 desliga_led_vermelho();
                 liga_led_verde();
-                envia_mensagem_nao_presenca();
+                    bool led_verde = true;
+                    bool led_vermelho = false;
+                    sprintf(mensagem, "{\"estado led verde\": %d, \"estado led vermelho\": %d}", led_verde, led_vermelho);
+                    sprintf(presenca, "{\"tem presenca\": %d}", led_vermelho);
+                    mqtt_envia_mensagem("v1/devices/me/attributes", mensagem);
+                    mqtt_envia_mensagem("v1/devices/me/attributes", presenca);
+                    vTaskDelay(1000 / portTICK_PERIOD_MS);
             }
         }
   }
